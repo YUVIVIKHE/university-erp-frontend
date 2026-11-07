@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# University ERP Frontend
 
-## Getting Started
+Next.js App Router, React, TypeScript and Tailwind CSS. Uses the shared University
+ERP backend for authentication, academic/Admin modules and the Accountant portal.
 
-First, run the development server:
+## Run
 
-```bash
+```text
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. If the backend is not on port 8080, set a local
+`.env.local` file:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+BACKEND_URL=http://localhost:8081
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Use the backend README for environment variables, database migrations and
+initial Admin setup. Admins provision Accountant users; sign in at
+`/accountant/login`.
 
-## Learn More
+## Accountant modules
 
-To learn more about Next.js, take a look at the following resources:
+Dashboard, student fees, fee structures/installments, collections/receipts,
+defaulters, scholarships/concessions, refunds, income/expenses and financial
+approvals, category budgets, staff/vendor payouts and a read-only cash-basis ledger
+are implemented. Payroll includes staff profiles, approved effective-dated fixed
+salary structures, monthly previews and saved payout breakdowns. Reports provide
+date-filtered cash summaries, comparisons/charts, collections, current balances,
+ageing, awards/refunds, budget variance and staff/vendor summaries with paged CSV
+export. Accountant Settings saves personal report defaults and displays current
+finance rules, and supports personal password changes that revoke old sessions.
+Audit Logs provides filtered, paged finance request activity, Accountant sign-ins
+and security/preferences events with page-only CSV export.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Accountant routes, components and services are under `src/app/accountant`,
+`src/components/accountant` and `src/lib/accountant`. Financial scope and rules
+are documented in the backend's `ACCOUNTANT_SETUP.md`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Checks
 
-## Deploy on Vercel
+```text
+npx tsc --noEmit
+npx eslint src/app/accountant src/components/accountant src/lib/accountant
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Keep source, lockfiles and regression checks in Git. Local credentials, runtime
+screenshots/logs, `node_modules`, `.next` and build output must stay excluded.
