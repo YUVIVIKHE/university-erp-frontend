@@ -264,6 +264,77 @@ export interface TimetableData {
   updatedAt: string;
 }
 
+export interface FacultyData {
+  id: number;
+  userId: number;
+  employeeId: string;
+  fullName: string;
+  email: string;
+  department: string;
+  designation: string;
+  specialization: string | null;
+  qualification: string | null;
+  dateOfJoining: string | null;
+  dateOfBirth: string | null;
+  phone: string | null;
+  address: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  tempPassword?: string | null;
+}
+
+export interface ExamScheduleData {
+  id: number;
+  examCode: string;
+  title: string;
+  examType: string;
+  program: string;
+  course: string;
+  semester: number;
+  academicYear: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+  venue: string | null;
+  totalMarks: number;
+  passingMarks: number;
+  subjectId: number | null;
+  subjectName: string | null;
+  subjectCode: string | null;
+  status: string;
+  instructions: string | null;
+  createdByName: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExamResultData {
+  id: number;
+  examId: number;
+  examCode: string;
+  examTitle: string;
+  examType: string;
+  examDate: string;
+  studentId: number;
+  rollNumber: string;
+  studentName: string;
+  program: string;
+  semester: number;
+  totalMarks: number;
+  passingMarks: number;
+  marksObtained: number | null;
+  grade: string | null;
+  gradePoints: number | null;
+  isAbsent: boolean;
+  isPass: boolean | null;
+  remarks: string | null;
+  enteredByName: string | null;
+  enteredAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export const api = {
   programs: {
     create: (data: Record<string, unknown>) =>
@@ -374,6 +445,13 @@ export const api = {
 
     get: (rollNumber: string) =>
       request<StudentData>(`/students/${rollNumber}`),
+
+    update: (rollNumber: string, data: Partial<{
+      program: string; semester: number; batchYear: number;
+      dateOfBirth: string; phone: string; address: string;
+      guardianName: string; guardianPhone: string; isActive: boolean;
+    }>) =>
+      request<StudentData>(`/students/${rollNumber}`, { method: "PATCH", body: JSON.stringify(data) }),
   },
 
   admissions: {
@@ -432,6 +510,54 @@ export const api = {
         `/attendance/recent-sessions?program=${encodeURIComponent(program)}${byParam}&limit=${limit}`
       );
     },
+  },
+
+  faculty: {
+    list: (search = "", department = "", active?: boolean, page = 0, size = 20) => {
+      const activeParam = active !== undefined ? `&active=${active}` : "";
+      return request<PageResponse<FacultyData>>(
+        `/faculty?search=${encodeURIComponent(search)}&department=${encodeURIComponent(department)}${activeParam}&page=${page}&size=${size}`
+      );
+    },
+    get: (id: number) => request<FacultyData>(`/faculty/${id}`),
+    create: (data: Record<string, unknown>) =>
+      request<FacultyData>("/faculty", { method: "POST", body: JSON.stringify(data) }),
+    update: (id: number, data: Record<string, unknown>) =>
+      request<FacultyData>(`/faculty/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  },
+
+  exams: {
+    list: (search = "", program = "", semester?: number, examType = "", status = "", academicYear = "", page = 0, size = 20) => {
+      const semParam = semester !== undefined ? `&semester=${semester}` : "";
+      return request<PageResponse<ExamScheduleData>>(
+        `/exams?search=${encodeURIComponent(search)}&program=${encodeURIComponent(program)}${semParam}&examType=${examType}&status=${status}&academicYear=${encodeURIComponent(academicYear)}&page=${page}&size=${size}`
+      );
+    },
+    get: (id: number) => request<ExamScheduleData>(`/exams/${id}`),
+    create: (data: Record<string, unknown>) =>
+      request<ExamScheduleData>("/exams", { method: "POST", body: JSON.stringify(data) }),
+    update: (id: number, data: Record<string, unknown>) =>
+      request<ExamScheduleData>(`/exams/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+    delete: (id: number) =>
+      request<void>(`/exams/${id}`, { method: "DELETE" }),
+    getResults: (examId: number) =>
+      request<ExamResultData[]>(`/exams/${examId}/results`),
+    saveResults: (examId: number, results: { studentId: number; marksObtained?: number; isAbsent: boolean; remarks?: string }[]) =>
+      request<ExamResultData[]>("/exams/results", { method: "POST", body: JSON.stringify({ examId, results }) }),
+    getStudentResults: (rollNumber: string) =>
+      request<ExamResultData[]>(`/exams/results/student/${encodeURIComponent(rollNumber)}`),
+    getStudentSemesterResults: (rollNumber: string, program: string, semester: number) =>
+      request<ExamResultData[]>(
+        `/exams/results/student/${encodeURIComponent(rollNumber)}/semester?program=${encodeURIComponent(program)}&semester=${semester}`
+      ),
+  },
+
+  studentPortal: {
+    me: () => request<StudentData>("/student/me"),
+    results: () => request<ExamResultData[]>("/student/results"),
+    resultsBySemester: (semester: number) => request<ExamResultData[]>(`/student/results/semester?semester=${semester}`),
+    attendance: () => request<{ subjectCode: string; subjectName: string; total: number; present: number; absent: number }[]>("/student/attendance"),
+    fees: () => request<FeeData[]>("/student/fees"),
   },
 
   subjects: {

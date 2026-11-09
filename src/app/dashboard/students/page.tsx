@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { api, StudentData } from "@/lib/api";
 
 export default function StudentsPage() {
@@ -114,14 +115,12 @@ export default function StudentsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <button
-                      onClick={() => {
-                        // expand a quick detail row inline — simple approach
-                      }}
+                    <Link
+                      href={`/dashboard/students/${encodeURIComponent(s.rollNumber)}`}
                       className="text-indigo-600 hover:underline text-xs font-medium"
                     >
-                      View
-                    </button>
+                      View →
+                    </Link>
                   </td>
                 </tr>
               ))}
