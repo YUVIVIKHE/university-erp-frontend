@@ -9,6 +9,9 @@ type NavItem =
   | { label: string; href: string; icon: React.ReactNode; children?: never }
   | { label: string; href: string; icon: React.ReactNode; children: { label: string; href: string }[] };
 
+/** Pages backed by admin-only APIs; hidden from faculty so they never hit a 403. */
+const ADMIN_ONLY = new Set(["/dashboard/grades", "/dashboard/library", "/dashboard/notices", "/dashboard/settings"]);
+
 const navItems: NavItem[] = [
   {
     label: "Dashboard",
@@ -187,7 +190,8 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-0.5">
-        {[...navItems, ...(user?.role === "ADMIN" ? [
+        {[...navItems.filter((i) => user?.role === "ADMIN" || !ADMIN_ONLY.has(i.href)), ...(user?.role === "ADMIN" ? [
+          { label: "Reports", href: "/dashboard/reports", icon: <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> },
           { label: "User Management", href: "/dashboard/admin/users", icon: <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8M20 8v6M17 11h6" /></svg> },
           { label: "Email / SMTP Settings", href: "/dashboard/admin/email-settings", icon: <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5h18v14H3zM3 5l9 8 9-8" /></svg> },
         ] as NavItem[] : [])].map((item) => {

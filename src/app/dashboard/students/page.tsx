@@ -46,8 +46,13 @@ export default function StudentsPage() {
           <h1 className="text-2xl font-bold text-slate-800">Students</h1>
           <p className="text-slate-500 text-sm mt-1">Enrolled students — provisioned from approved admissions</p>
         </div>
-        <div className="bg-indigo-50 text-indigo-700 px-4 py-2 rounded-lg text-sm font-medium">
-          {totalElements} total
+        <div className="flex items-center gap-2">
+          <div className="bg-indigo-50 text-indigo-700 px-4 py-2 rounded-lg text-sm font-medium">
+            {totalElements} total
+          </div>
+          <Link href="/dashboard/students/import" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            Import from Excel
+          </Link>
         </div>
       </div>
 

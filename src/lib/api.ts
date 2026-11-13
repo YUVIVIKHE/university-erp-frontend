@@ -557,7 +557,12 @@ export const api = {
     results: () => request<ExamResultData[]>("/student/results"),
     resultsBySemester: (semester: number) => request<ExamResultData[]>(`/student/results/semester?semester=${semester}`),
     attendance: () => request<{ subjectCode: string; subjectName: string; total: number; present: number; absent: number }[]>("/student/attendance"),
+    attendanceDetail: () => request<{ id: number; subjectCode: string; subjectName: string; date: string; timeSlot: string; status: string; remarks: string | null }[]>("/student/attendance/detail"),
     fees: () => request<FeeData[]>("/student/fees"),
+    subjects: (page = 0) => request<PageResponse<SubjectData>>(`/student/subjects?page=${page}`),
+    timetable: () => request<TimetableData | null>("/student/timetable"),
+    updateProfile: (data: { phone?: string; address?: string; guardianName?: string; guardianPhone?: string }) =>
+      request<StudentData>("/student/profile", { method: "PATCH", body: JSON.stringify(data) }),
   },
 
   subjects: {
