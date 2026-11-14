@@ -158,6 +158,100 @@ export interface StudentData {
   updatedAt: string;
 }
 
+export interface StudentLibraryData {
+  summary: {
+    totalTitles: number;
+    availableCopies: number;
+    borrowedByMe: number;
+    overdueByMe: number;
+  };
+  books: Array<{
+    id: number;
+    title: string;
+    author: string;
+    category: string | null;
+    accessionNo: string;
+    totalCopies: number;
+    availableCopies: number;
+    shelf: string | null;
+  }>;
+  issued: Array<{
+    id: number;
+    bookTitle: string;
+    accessionNo: string;
+    issueDate: string | null;
+    dueDate: string | null;
+    returnDate: string | null;
+    status: string;
+    fine: number | null;
+    daysOverdue: number;
+    estimatedFine: number | null;
+  }>;
+}
+
+export interface LibraryBookData {
+  id: number;
+  accessionNo: string;
+  isbn: string | null;
+  title: string;
+  author: string;
+  publisher: string | null;
+  category: string | null;
+  shelf: string | null;
+  totalCopies: number;
+  availableCopies: number;
+  issuedCopies: number;
+}
+
+export interface LibraryBookPage {
+  content: LibraryBookData[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+}
+
+export interface StudentScholarshipApplication {
+  id: string;
+  admission_id: string;
+  student_name: string;
+  program: string;
+  scheme: string;
+  category: string;
+  funding: string;
+  academic_year: number;
+  requested_amount: number;
+  evidence_reference: string;
+  reason: string;
+  status: string;
+  reviewed_by: string | null;
+  review_note: string | null;
+  financial_outcome: string | null;
+  approved_amount: number | null;
+  created_at: string;
+}
+
+export interface StudentScholarshipOffer {
+  id: number;
+  scheme: string;
+  description: string;
+  category: string;
+  funding: string;
+  program: string | null;
+  minSemester: number;
+  maxSemester: number;
+  minBatchYear: number;
+  maxBatchYear: number;
+  maxAmount: number;
+  academicYear: number;
+  applicationDeadline: string | null;
+  eligibilityCriteria: string;
+  eligible: boolean;
+  eligibilityMessage: string;
+  applicationStatus: string | null;
+  financialOutcome: string | null;
+  approvedAmount: number | null;
+}
+
 export interface CourseFeeComponent {
   id: number;
   feeType: string;
@@ -561,8 +655,67 @@ export const api = {
     fees: () => request<FeeData[]>("/student/fees"),
     subjects: (page = 0) => request<PageResponse<SubjectData>>(`/student/subjects?page=${page}`),
     timetable: () => request<TimetableData | null>("/student/timetable"),
+    registration: () => request<{
+      academicYear: string;
+      termName: string;
+      semester: number;
+      studentId: string;
+      rollNumber: string;
+      course: string;
+      department: string;
+      division: string;
+      registrationDate: string;
+      registrationDeadline: string;
+      status: string;
+      approvalStatus: string;
+      approvalRemarks: string | null;
+      registrationReceipt: string;
+      selectedSubjects: string[];
+      availableSubjects: SubjectData[];
+      totalCredits: number;
+    }>("/student/registration"),
+    submitRegistration: (selectedSubjects: string[]) => request<{
+      academicYear: string;
+      termName: string;
+      semester: number;
+      studentId: string;
+      rollNumber: string;
+      course: string;
+      department: string;
+      division: string;
+      registrationDate: string;
+      registrationDeadline: string;
+      status: string;
+      approvalStatus: string;
+      approvalRemarks: string | null;
+      registrationReceipt: string;
+      selectedSubjects: string[];
+      totalCredits: number;
+      availableSubjects?: SubjectData[];
+    }>("/student/registration", { method: "POST", body: JSON.stringify({ selectedSubjects }) }),
     updateProfile: (data: { phone?: string; address?: string; guardianName?: string; guardianPhone?: string }) =>
       request<StudentData>("/student/profile", { method: "PATCH", body: JSON.stringify(data) }),
+    library: () => request<StudentLibraryData>("/student/library"),
+    libraryCategories: () => request<string[]>("/student/library/categories"),
+    libraryBooks: (search = "", category = "", availableOnly = false, page = 0) => {
+      const params = new URLSearchParams({
+        search,
+        category,
+        availableOnly: String(availableOnly),
+        page: String(page),
+      });
+      return request<LibraryBookPage>(`/student/library/books?${params.toString()}`);
+    },
+    libraryBook: (id: number) => request<LibraryBookData>(`/student/library/books/${id}`),
+    scholarships: () => request<StudentScholarshipApplication[]>("/student/scholarships"),
+    scholarshipOffers: () => request<StudentScholarshipOffer[]>("/student/scholarships/offers"),
+    applyForScholarship: (
+      offerId: number,
+      data: { requestId: string; requestedAmount: number; evidenceReference: string; reason: string }
+    ) => request<StudentScholarshipApplication>(`/student/scholarships/offers/${offerId}/applications`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
   },
 
   subjects: {

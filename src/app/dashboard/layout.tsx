@@ -9,6 +9,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Suspense fallback={<div className="w-64 shrink-0 bg-white border-r border-gray-200" />}>
         <Sidebar />
       </Suspense>
+
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
         <header className="h-16 bg-white border-b border-gray-200 flex items-center px-8 shrink-0">

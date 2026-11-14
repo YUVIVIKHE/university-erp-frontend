@@ -6,7 +6,11 @@ import { getToken } from "@/lib/auth";
 import AccountantSidebar from "@/components/accountant/AccountantSidebar";
 
 export default function AccountantLayoutClient({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<main className="p-8 text-gray-500" role="status">Checking your account…</main>}><AccountantLayoutContent>{children}</AccountantLayoutContent></Suspense>;
+  return (
+    <Suspense fallback={<main className="p-8 text-gray-500" role="status">Checking your account…</main>}>
+      <AccountantLayoutContent>{children}</AccountantLayoutContent>
+    </Suspense>
+  );
 }
 
 function AccountantLayoutContent({ children }: { children: React.ReactNode }) {

@@ -35,6 +35,15 @@ const NAV = [
     ),
   },
   {
+    href: "/student/registration",
+    label: "Registration",
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a2 2 0 011.414.586l5.414 5.414A2 2 0 0118 10.414V19a2 2 0 01-2 2z" />
+      </svg>
+    ),
+  },
+  {
     href: "/student/attendance",
     label: "Attendance",
     icon: (
@@ -62,8 +71,26 @@ const NAV = [
     ),
   },
   {
-    href: "/student/profile",
-    label: "My Profile",
+    href: "/student/library",
+    label: "Library",
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6.75A2.75 2.75 0 016.75 4h10.5A2.75 2.75 0 0120 6.75v10.5A2.75 2.75 0 0117.25 20H6.75A2.75 2.75 0 014 17.25V6.75zm4 1.5h8m-8 4h8m-8 4h5" />
+      </svg>
+    ),
+  },
+  {
+    href: "/student/scholarships",
+    label: "Scholarships",
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l2.5 5.5L20 9l-4 3.5 1 5-5-2.5-5 2.5 1-5L4 9l5.5-.5L12 3z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/student/personal",
+    label: "Personal",
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
