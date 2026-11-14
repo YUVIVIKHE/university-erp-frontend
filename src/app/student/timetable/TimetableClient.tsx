@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { api, TimetableData, TimetableSlot } from "@/lib/api";
 
-const DAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const DAY_SHORT: Record<string, string> = {
-  MONDAY: "Mon", TUESDAY: "Tue", WEDNESDAY: "Wed",
-  THURSDAY: "Thu", FRIDAY: "Fri", SATURDAY: "Sat",
+  MON: "Mon", TUE: "Tue", WED: "Wed",
+  THU: "Thu", FRI: "Fri", SAT: "Sat",
 };
 
 const TYPE_COLORS: Record<string, string> = {
@@ -21,7 +21,7 @@ const TYPE_DOT: Record<string, string> = {
 };
 
 function todayDay() {
-  return ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"][new Date().getDay()];
+  return ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][new Date().getDay()];
 }
 
 function fmt(t: string) {

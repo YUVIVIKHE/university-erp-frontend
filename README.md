@@ -10,8 +10,8 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. If the backend is not on port 8080, set a local
-`.env.local` file:
+Open http://localhost:3000. The backend proxy defaults to port 8081. If your
+backend is on another port, set a local `.env.local` file:
 
 ```text
 BACKEND_URL=http://localhost:8081
